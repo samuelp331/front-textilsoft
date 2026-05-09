@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TextilSoft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./src/styles/styles.css">
+    <script>
+        window.TEXTILSOFT_API_BASE_URL = 'http://127.0.0.1:8000/api';
+    </script>
+    <!-- Exportación a CSV y a impresión/PDF desde el cliente -->
+</head>
+<body>
+    <div id="app">
+        <!-- Login Page -->
+        <div id="loginPage" class="page active">
+            <div class="logo-container">
+                <svg class="logo" viewBox="0 0 200 100">
+                    <path d="M20,50 Q50,20 80,50 T140,50" fill="none" stroke="#fff" stroke-width="2"/>
+                    <path d="M30,60 Q60,30 90,60 T150,60" fill="none" stroke="#aaf" stroke-width="2"/>
+                    <path d="M40,70 Q70,40 100,70 T160,70" fill="none" stroke="#88f" stroke-width="2"/>
+                </svg>
+                <h1>TEXTILSOFT</h1>
+            </div>
+            <form id="loginForm" class="login-form">
+                <input type="text" id="username" placeholder="Usuario" required>
+                <input type="password" id="password" placeholder="Contraseña" required>
+                <button type="submit">Iniciar Sesión</button>
+                <div class="login-links">
+                    <a href="#" id="recoverAccountLink">Recuperar Cuenta</a>
+                </div>
+                <button type="button" id="registerNavBtn" class="register-btn">Registrarse</button>
+            </form>
+        </div>
+
+        <!-- Registration Page -->
+        <div id="registrationPage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TEXTILSOFT</span>
+                </div>
+                <button id="exitRegistrationBtn">SALIR</button>
+            </header>
+            <div class="registration-container">
+                <h1>REGISTRATE</h1>
+                <form id="registrationForm" class="registration-form">
+                    <input type="text" id="regName" placeholder="Nombre" required>
+                    <input type="text" id="regIdentification" placeholder="Identificación" required>
+                    <input type="tel" id="regCellphone" placeholder="Celular" required>
+                    <input type="email" id="regEmail" placeholder="Email" required>
+                    <select id="regRole" required aria-label="Rol en el sistema">
+                        <option value="operario">Operario</option>
+                        <option value="bodeguero">Bodeguero</option>
+                        <option value="supervisor">Supervisor</option>
+                        <option value="administrador">Administrador</option>
+                    </select>
+                    <input type="text" id="regAddress" placeholder="Dirección" required>
+                    <input type="password" id="regPassword" placeholder="Contraseña" required>
+                    <input type="password" id="regConfirmPassword" placeholder="Confirmar Contraseña" required>
+                    <button type="submit" id="regSubmitBtn">INGRESAR</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page">
+            <header>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TEXTILSOFT</span>
+                </div>
+                <button id="logoutBtn">TERMINAR SESIÓN</button>
+            </header>
+            <div class="dashboard-grid">
+                <button class="dashboard-btn" data-page="profile">PERFIL</button>
+                <button class="dashboard-btn" data-page="product">PRODUCTO</button>
+                <button class="dashboard-btn" data-page="reports">REPORTES</button>
+                <button class="dashboard-btn" data-page="alerts">ALERTAS</button>
+                <button class="dashboard-btn" data-page="suppliers">PROVEEDORES</button>
+                <button class="dashboard-btn" id="adminPanelBtn" data-page="admin">ADMIN</button>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profilePage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TEXTILSOFT</span>
+                </div>
+                <button id="logoutProfileBtn">TERMINAR SESIÓN</button>
+            </header>
+            <div class="profile-content">
+                <h2>PERFIL DE USUARIO</h2>
+                <form id="profileForm" class="profile-form">
+                    <div class="photo-upload">
+                        <div class="photo-preview"></div>
+                        <button type="button" id="updatePhotoBtn">Actualizar Foto</button>
+                    </div>
+                    <div class="form-grid">
+                        <label for="profileName">Nombre:</label>
+                        <input type="text" id="profileName" placeholder="Nombre" readonly>
+                        <label for="profileIdentification">Identificación:</label>
+                        <input type="text" id="profileIdentification" placeholder="Identificación" readonly>
+                        <label for="profileCellphone">Celular:</label>
+                        <input type="tel" id="profileCellphone" placeholder="Teléfono" readonly>
+                        <label for="profileJobTitle">Cargo:</label>
+                        <input type="text" id="profileJobTitle" placeholder="Cargo" readonly>
+                        <label for="profileEmail">Email:</label>
+                        <input type="email" id="profileEmail" placeholder="Email" readonly>
+                        <label for="profileAddress">Dirección:</label>
+                        <input type="text" id="profileAddress" placeholder="Dirección" readonly>
+                        <label for="profileEntryDate">Fecha de Contratación:</label>
+                        <input type="date" id="profileEntryDate" placeholder="Fecha de Contratación" readonly>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Product Page -->
+        <div id="productPage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TEXTILSOFT</span>
+                </div>
+                <button id="logoutProductBtn">TERMINAR SESIÓN</button>
+            </header>
+            <div class="product-options">
+                <button id="addProductBtn">Agregar Producto</button>
+                <button id="updateInventoryBtn">Actualizar Inventario</button>
+                <button id="deleteProductBtn">Eliminar Producto</button>
+                <button id="importCsvBtn">Importar Datos</button>
+            </div>
+            <div id="productContent">
+                <h2>Inventario</h2>
+                <p>Cargando inventario...</p>
+            </div>
+
+            <!-- Add Product Modal -->
+            <div id="addProductModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <h2>Agregar Producto</h2>
+                    <form id="addProductForm">
+                        <input type="text" id="productCode" placeholder="Código" required>
+                        <input type="text" id="productName" placeholder="Nombre del Producto" required>
+                        <input type="text" id="productCategory" placeholder="Categoría" required>
+                        <select id="productUbicacion">
+                            <option value="">Seleccione Ubicación (Opcional)</option>
+                        </select>
+                        <textarea id="productDescription" placeholder="Descripción" required></textarea>
+                        <input type="number" id="productQuantity" placeholder="Cantidad" required min="0">
+                        <input type="number" id="productMinQuantity" placeholder="Cantidad Mínima (Alerta)" required min="0">
+                        <input type="number" id="productPrice" placeholder="Precio" required min="0">
+                        <select id="productUnit" required>
+                            <option value="">Seleccione Unidad</option>
+                            <option value="unidad">Unidad</option>
+                            <option value="metro">Metro</option>
+                            <option value="rollo">Rollo</option>
+                        </select>
+                        <div class="form-group">
+                            <label for="productExpirationDate">Fecha de Vencimiento:</label>
+                            <input type="date" id="productExpirationDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="productNotifyDaysBefore">Días de Preaviso para Vencimiento:</label>
+                            <input type="number" id="productNotifyDaysBefore" placeholder="Días antes para notificar" value="30" min="1">
+                        </div>
+                        <button type="submit">Guardar</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Import CSV Modal -->
+            <div id="importCsvModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <h2>Importar Datos</h2>
+                    <form id="importCsvForm">
+                        <p>Seleccione un archivo CSV con el formato: Código, Nombre, Categoría, Descripción, Cantidad, Precio, Unidad</p>
+                        <input type="file" id="csvFile" accept=".csv">
+                        <button type="button" id="processCsvBtn" class="primary-button">Importar</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Update Inventory Modal -->
+            <div id="updateInventoryModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <h2>Actualizar Inventario</h2>
+                    <form id="updateInventoryForm">
+                        <select id="updateProductSelect" required>
+                            <option value="">Seleccionar Producto</option>
+                        </select>
+                        <select id="updateType" required>
+                            <option value="">Tipo de Actualización</option>
+                            <option value="entrada">Entrada</option>
+                            <option value="salida">Salida</option>
+                            <option value="ajuste">Ajuste</option>
+                        </select>
+                        <input type="number" id="updateQuantity" placeholder="Cantidad" required>
+                        <textarea id="updateReason" placeholder="Motivo" required></textarea>
+                        <button type="submit">Actualizar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Page -->
+        <div id="reportsPage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TextilSoft</span>
+                </div>
+                <button id="logoutReportsBtn">TERMINAR SESIÓN</button>
+            </header>
+            
+            <h1>Reportes</h1>
+            
+            <!-- Tarjetas de selección de reportes con iconos en base64 para garantizar que se muestren -->
+            <div class="reports-grid">
+                <div class="report-card" id="inventoryMovementsCard">
+                    <div class="report-icon">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWJhci1jaGFydCI+PHBhdGggZD0iTTEyIDIwVjEwIi8+PHBhdGggZD0iTTE4IDIwVjQiLz48cGF0aCBkPSJNNiAyMHYtOCIvPjwvc3ZnPg==" alt="Inventario">
+                    </div>
+                    <h3>Movimientos de Inventario</h3>
+                    <p>Visualiza todas las entradas y salidas de productos del inventario.</p>
+                </div>
+                
+                <div class="report-card" id="consumptionReportsCard">
+                    <div class="report-icon">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxpbmUtY2hhcnQiPjxwYXRoIGQ9Ik0zIDNoMThhMiAyIDAgMCAxIDIgMnYxNGEyIDIgMCAwIDEtMiAySDNhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJ6Ii8+PHBhdGggZD0ibTMgOSA0IDQgOC04IDQgNCIvPjwvc3ZnPg==" alt="Consumo">
+                    </div>
+                    <h3>Consumo de Materiales</h3>
+                    <p>Analiza el consumo de materiales en diferentes períodos.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts Page -->
+        <div id="alertsPage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TEXTILSOFT</span>
+                </div>
+                <button id="logoutAlertsBtn">TERMINAR SESIÓN</button>
+            </header>
+            <div class="alerts-container">
+                <div class="alerts-header">
+                    <h1>Alertas de Inventario</h1>
+                    <div class="alerts-actions">
+                        <button id="alertConfigBtn" class="config-button">Configuración</button>
+                        <button id="refreshAlertsBtn" class="refresh-button">Actualizar</button>
+                    </div>
+                </div>
+                
+                <div class="alerts-stats">
+                    <div class="alert-summary">
+                        <span id="alertCount" class="alert-count">0</span>
+                        <span class="alert-label">Alertas activas</span>
+                    </div>
+                </div>
+                
+                <div id="alertsList" class="alerts-list">
+                    <!-- Las alertas se generarán dinámicamente aquí -->
+                </div>
+                <div class="alerts-history-section" id="alertsHistorySection">
+                    <h2>Historial de alertas atendidas</h2>
+                    <div id="alertsHistoryList" class="alerts-history-list"></div>
+                </div>
+            </div>
+
+            <div id="notificationSettingsModal" class="modal" aria-labelledby="notificationSettingsTitle">
+                <div class="modal-content notification-settings-modal">
+                    <span class="close-button" aria-hidden="true">&times;</span>
+                    <h2 id="notificationSettingsTitle" class="notification-settings-heading">Configuración de alertas</h2>
+                    <form id="notificationSettingsForm">
+                        <div class="settings-group">
+                            <h3>Canales de notificación</h3>
+                            <div class="setting-item">
+                                <label for="notifyInApp">
+                                    <input type="checkbox" id="notifyInApp" name="notifyInApp" checked>
+                                    Notificaciones dentro de TextilSoft
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label for="notifyDesktop">
+                                    <input type="checkbox" id="notifyDesktop" name="notifyDesktop">
+                                    Notificaciones del navegador (escritorio)
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label for="notifyEmailEnabled">
+                                    <input type="checkbox" id="notifyEmailEnabled" name="notifyEmailEnabled">
+                                    Aviso por correo electrónico
+                                </label>
+                                <div id="emailSettings" class="hidden">
+                                    <label for="notifyEmailAddress">Correo para avisos</label>
+                                    <input type="email" id="notifyEmailAddress" name="notifyEmailAddress" placeholder="nombre@empresa.com" autocomplete="email">
+                                    <small class="settings-hint">La app guarda tus preferencias en este equipo.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit">Guardar preferencias</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recover Account Page -->
+        <div id="recoverAccountPage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TEXTILSOFT</span>
+                </div>
+                <button id="exitRecoveryBtn">SALIR</button>
+            </header>
+            <div class="recovery-container">
+                <h1>RECUPERAR CUENTA</h1>
+                <form id="recoverAccountForm" class="recovery-form">
+                    <p>Ingrese su correo electrónico para recuperar su cuenta.</p>
+                    <input type="email" id="recoverEmail" placeholder="Email" required>
+                    <button type="submit">Enviar Instrucciones</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Restablecer contraseña (desde enlace del correo ?page=resetPassword&uid=&token=) -->
+        <div id="resetPasswordPage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TEXTILSOFT</span>
+                </div>
+                <button id="exitResetPasswordBtn" type="button">SALIR</button>
+            </header>
+            <div class="recovery-container">
+                <h1>NUEVA CONTRASEÑA</h1>
+                <form id="resetPasswordForm" class="recovery-form" autocomplete="off">
+                    <p>Elegí una contraseña nueva (mínimo 6 caracteres).</p>
+                    <input type="password" id="resetPassword1" placeholder="Nueva contraseña" required minlength="6" autocomplete="new-password">
+                    <input type="password" id="resetPassword2" placeholder="Confirmar contraseña" required minlength="6" autocomplete="new-password">
+                    <button type="submit">Guardar contraseña</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Página para Reporte de Movimientos de Inventario -->
+        <div id="inventoryMovementsPage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TextilSoft</span>
+                </div>
+                <button id="logoutInventoryMovementsBtn">TERMINAR SESIÓN</button>
+            </header>
+            
+            <div class="report-header">
+                <div class="report-title-icon">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWJhci1jaGFydCI+PHBhdGggZD0iTTEyIDIwVjEwIi8+PHBhdGggZD0iTTE4IDIwVjQiLz48cGF0aCBkPSJNNiAyMHYtOCIvPjwvc3ZnPg==" alt="Inventario">
+                    <h2>Reporte de Movimientos de Inventario</h2>
+                </div>
+            </div>
+            
+            <div id="movements-report-content" class="report-content">
+                <h3>Movimientos de Inventario</h3>
+                
+                <div class="filter-controls">
+                    <div class="filter-control">
+                        <label for="movementStartDate">Desde:</label>
+                        <input type="date" id="movementStartDate" class="light-input">
+                    </div>
+                    <div class="filter-control">
+                        <label for="movementEndDate">Hasta:</label>
+                        <input type="date" id="movementEndDate" class="light-input">
+                    </div>
+                    <div class="filter-control">
+                        <label for="movementProductSelect">Producto:</label>
+                        <select id="movementProductSelect" class="light-select">
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+                    <div class="filter-control">
+                        <button id="applyMovementFiltersBtn" class="accent-button">Aplicar Filtros</button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="movementsTable" class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Motivo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="table-message">Cargando datos...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="report-actions">
+                    <button id="exportMovementsPdfBtn" class="primary-button">
+                        <i class="fas fa-file-pdf"></i> Exportar PDF
+                    </button>
+                    <button id="exportMovementsExcelBtn" class="primary-button">Exportar CSV</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página para Reporte de Consumo de Materiales -->
+        <div id="consumptionReportPage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TextilSoft</span>
+                </div>
+                <button id="logoutConsumptionReportBtn">TERMINAR SESIÓN</button>
+            </header>
+            
+            <div class="report-header">
+                <div class="report-title-icon">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxpbmUtY2hhcnQiPjxwYXRoIGQ9Ik0zIDNoMThhMiAyIDAgMCAxIDIgMnYxNGEyIDIgMCAwIDEtMiAySDNhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJ6Ii8+PHBhdGggZD0ibTMgOSA0IDQgOC04IDQgNCIvPjwvc3ZnPg==" alt="Consumo">
+                    <h2>Reporte de Consumo de Materiales</h2>
+                </div>
+            </div>
+            
+            <div class="report-filters">
+                <select id="consumptionCategorySelect" class="light-select">
+                    <option value="">Todas las categorías</option>
+                </select>
+                <button id="applyConsumptionFiltersBtn">Aplicar Filtros</button>
+            </div>
+
+            <div class="report-trend-block">
+                <h3 class="report-trend-title">Tendencia en el tiempo (salidas por producto)</h3>
+                <p class="report-trend-hint">Suma de <strong>salidas</strong> por periodo según el agrupamiento elegido.</p>
+                <div class="report-filters report-trend-filters">
+                    <label for="consumptionTrendProductSelect">Producto:</label>
+                    <select id="consumptionTrendProductSelect" class="light-select">
+                        <option value="">Seleccione un producto</option>
+                    </select>
+                    <label for="consumptionTrendStart">Desde:</label>
+                    <input type="date" id="consumptionTrendStart" class="light-input">
+                    <label for="consumptionTrendEnd">Hasta:</label>
+                    <input type="date" id="consumptionTrendEnd" class="light-input">
+                    <label for="consumptionTrendGroupSelect">Agrupar:</label>
+                    <select id="consumptionTrendGroupSelect" class="light-select">
+                        <option value="mes">Por mes</option>
+                        <option value="semana">Por semana</option>
+                        <option value="dia">Por día</option>
+                    </select>
+                    <button type="button" id="applyConsumptionTrendBtn">Actualizar tendencia</button>
+                </div>
+                <div id="consumptionTrendChart" class="consumption-trend-chart-host"></div>
+            </div>
+            
+            <div id="consumptionChart" class="consumption-aggregate-chart" aria-live="polite"></div>
+            
+            <div class="report-results">
+                <table id="consumptionTable">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Porcentaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Los datos se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="report-actions">
+                <button id="exportConsumptionExcelBtn">Exportar CSV</button>
+                <button id="exportConsumptionPdfBtn">Exportar a PDF</button>
+            </div>
+        </div>
+
+        <!-- Suppliers Page -->
+        <div id="suppliersPage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TextilSoft</span>
+                </div>
+                <button id="logoutSuppliersBtn">TERMINAR SESIÓN</button>
+            </header>
+            <h1>Gestión de Proveedores</h1>
+            <div class="product-options">
+                <!-- El botón "Agregar Proveedor" se moverá de aquí -->
+            </div>
+            <input type="text" id="supplierSearch" class="light-input" placeholder="Buscar proveedor por nombre o contacto...">
+            
+            <div class="table-container">
+                <table id="suppliersTable" class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Contacto</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Calificación</th>
+                            <th>Evaluaciones</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="7" class="table-message">Cargando proveedores...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Nuevo contenedor para el botón -->
+            <div class="page-actions-footer">
+                <button id="addSupplierBtn" class="accent-button">Agregar Proveedor</button>
+            </div>
+
+            <!-- Add/Edit Supplier Modal -->
+            <div id="supplierModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button" id="closeSupplierModal">&times;</span>
+                    <h2 id="supplierModalTitle">Agregar Proveedor</h2>
+                    <form id="supplierForm">
+                        <input type="hidden" id="supplierId">
+                        <label for="supplierName">Nombre del Proveedor:</label>
+                        <input type="text" id="supplierName" required>
+                        
+                        <label for="supplierContactPerson">Nombre del Contacto:</label>
+                        <input type="text" id="supplierContactPerson" placeholder="Nombre del contacto">
+                        
+                        <label for="supplierEmail">Email:</label>
+                        <input type="email" id="supplierEmail">
+                        
+                        <label for="supplierPhone">Teléfono:</label>
+                        <input type="tel" id="supplierPhone">
+                        
+                        <label for="supplierAddress">Dirección:</label>
+                        <textarea id="supplierAddress"></textarea>
+                        
+                        <label for="supplierNotes">Notas:</label>
+                        <textarea id="supplierNotes"></textarea>
+
+                        <label for="supplierProductsSupplied">Productos / materias que suministra:</label>
+                        <textarea id="supplierProductsSupplied" rows="3" placeholder="Ej: Hilo poliéster, Tela drill, Botones… (una por línea o separados por coma)"></textarea>
+
+                        <button type="button" id="rateSupplierBtn" class="secondary-button" style="margin-top: 10px;">Calificar Proveedor</button>
+
+                        <button type="submit" id="saveSupplierBtn">Guardar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="supplierRatingsHistoryModal" class="modal">
+                <div class="modal-content" style="max-width: 640px;">
+                    <span class="close-button" id="closeSupplierRatingsHistoryModal">&times;</span>
+                    <h2 id="supplierRatingsHistoryTitle">Historial de evaluaciones</h2>
+                    <div class="table-container">
+                        <table class="report-table" id="supplierRatingsHistoryTable">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Calidad</th>
+                                    <th>Tiempos</th>
+                                    <th>Precio/calidad</th>
+                                    <th>Prom.</th>
+                                    <th>Comentario</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supplierRatingsHistoryBody">
+                                <tr><td colspan="6" class="table-message">Cargando…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rate Supplier Modal -->
+            <div id="rateSupplierModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button" id="closeRateSupplierModal">&times;</span>
+                    <h2 id="rateSupplierModalTitle">Calificar Proveedor</h2>
+                    <form id="rateSupplierForm">
+                        <input type="hidden" id="rateSupplierId">
+
+                        <label for="rateCalidadSuministro">Calidad del Suministro:</label>
+                        <select id="rateCalidadSuministro" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="1">1 - Muy Bajo</option>
+                            <option value="2">2 - Bajo</option>
+                            <option value="3">3 - Regular</option>
+                            <option value="4">4 - Bueno</option>
+                            <option value="5">5 - Excelente</option>
+                        </select>
+
+                        <label for="rateCumplimientoTiempos">Cumplimiento de Tiempos:</label>
+                        <select id="rateCumplimientoTiempos" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="1">1 - Muy Bajo</option>
+                            <option value="2">2 - Bajo</option>
+                            <option value="3">3 - Regular</option>
+                            <option value="4">4 - Bueno</option>
+                            <option value="5">5 - Excelente</option>
+                        </select>
+
+                        <label for="ratePrecioCalidad">Precio vs Calidad:</label>
+                        <select id="ratePrecioCalidad" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="1">1 - Muy Bajo</option>
+                            <option value="2">2 - Bajo</option>
+                            <option value="3">3 - Regular</option>
+                            <option value="4">4 - Bueno</option>
+                            <option value="5">5 - Excelente</option>
+                        </select>
+
+                        <label for="rateComentario">Comentario:</label>
+                        <textarea id="rateComentario" placeholder="Observaciones sobre el proveedor..."></textarea>
+
+                        <button type="submit" id="saveRatingBtn">Guardar Calificación</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel Page -->
+        <div id="adminPage" class="page">
+            <header>
+                <button class="back-btn">Volver</button>
+                <div class="logo-small">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M10,25 Q25,10 40,25 T70,25" fill="none" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>TEXTILSOFT</span>
+                </div>
+                <button id="logoutAdminBtn">TERMINAR SESIÓN</button>
+            </header>
+            <div class="admin-container">
+                <h1>Panel Administrativo</h1>
+                <div class="admin-quick-links">
+                    <span class="admin-quick-links-label">Accesos rápidos</span>
+                    <button type="button" class="admin-quick-btn" data-admin-nav-page="productPage">Inventario</button>
+                    <button type="button" class="admin-quick-btn" data-admin-nav-page="alertsPage">Alertas</button>
+                    <button type="button" class="admin-quick-btn" data-admin-nav-page="suppliersPage">Proveedores</button>
+                    <button type="button" class="admin-quick-btn" data-admin-nav-page="reportsPage">Reportes</button>
+                    <button type="button" class="admin-quick-btn" data-admin-nav-page="inventoryMovementsPage">Movimientos</button>
+                </div>
+                <section class="admin-section admin-users-section" id="adminUsersSection" aria-labelledby="adminUsersHeading">
+                    <h2 id="adminUsersHeading">Gestión de usuarios</h2>
+                    <p class="admin-users-hint">
+                        Crear cuentas, editar datos o rol, o desactivar el acceso. Los cambios de rol o contraseña
+                        cierran la sesión en otros dispositivos. El registro público sigue disponible en la pantalla inicial.
+                    </p>
+                    <div class="admin-users-toolbar">
+                        <button type="button" class="admin-user-new-btn" id="adminUserNewBtn">Nuevo usuario</button>
+                    </div>
+                    <form id="adminUserForm" class="admin-user-form" hidden>
+                        <h3 class="admin-user-form-title" id="adminUserFormTitle">Nuevo usuario</h3>
+                        <input type="hidden" id="adminUserEditId" value="">
+                        <label for="adminUserNombre">Nombre</label>
+                        <input type="text" id="adminUserNombre" required maxlength="120" autocomplete="name">
+
+                        <label for="adminUserEmail">Correo</label>
+                        <input type="email" id="adminUserEmail" required autocomplete="email">
+
+                        <label for="adminUserPassword"><span id="adminUserPasswordLabel">Contraseña</span></label>
+                        <input type="password" id="adminUserPassword" autocomplete="new-password" minlength="6">
+
+                        <label for="adminUserRol">Rol</label>
+                        <select id="adminUserRol" required>
+                            <option value="operario">Operario</option>
+                            <option value="bodeguero">Bodeguero</option>
+                            <option value="supervisor">Supervisor</option>
+                            <option value="administrador">Administrador</option>
+                        </select>
+
+                        <div class="admin-user-estado-row" id="adminUserEstadoRow" hidden>
+                            <label for="adminUserEstado">Estado</label>
+                            <select id="adminUserEstado">
+                                <option value="activo">Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                        </div>
+
+                        <div class="admin-user-form-actions">
+                            <button type="submit" id="adminUserSubmitBtn">Guardar</button>
+                            <button type="button" class="admin-user-cancel-btn" id="adminUserCancelBtn">Cancelar</button>
+                        </div>
+                    </form>
+                    <div class="admin-users-table-wrap">
+                        <table class="admin-users-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersTableBody">
+                                <tr><td colspan="5" class="admin-users-loading">Cargando…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <div class="admin-stats-grid" id="adminStatsGrid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-boxes"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statTotalProducts">-</div>
+                            <div class="stat-label">Total Productos</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statActiveAlerts">-</div>
+                            <div class="stat-label">Incidencias de alerta</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statUniqueAlertProducts">-</div>
+                            <div class="stat-label">Productos con alerta</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statTotalUsers">-</div>
+                            <div class="stat-label">Usuarios activos</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-truck"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statTotalSuppliers">-</div>
+                            <div class="stat-label">Total Proveedores</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-arrow-down"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statLowStock">-</div>
+                            <div class="stat-label">Stock Bajo</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statExpiringSoon">-</div>
+                            <div class="stat-label">Vencimiento (próx. o vencidos)</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statInStock">-</div>
+                            <div class="stat-label">Sobre stock mínimo</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statTotalMovements">-</div>
+                            <div class="stat-label">Registros de movimiento</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-sections">
+                    <div class="admin-section">
+                        <h2>Resumen de Inventario</h2>
+                        <div class="admin-chart" id="inventorySummaryChart">
+                            <div class="chart-bars">
+                                <div class="chart-bar-group">
+                                    <div class="chart-bar" id="barLowStock" style="height: 0%"></div>
+                                    <span class="chart-label">Stock bajo</span>
+                                </div>
+                                <div class="chart-bar-group">
+                                    <div class="chart-bar" id="barExpiring" style="height: 0%"></div>
+                                    <span class="chart-label">Vencimiento</span>
+                                </div>
+                                <div class="chart-bar-group">
+                                    <div class="chart-bar" id="barOk" style="height: 0%"></div>
+                                    <span class="chart-label">Sobre mínimo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="admin-section">
+                        <h2>Alertas Recientes</h2>
+                        <div class="admin-alerts-list" id="adminAlertsList">
+                            <p class="loading-text">Cargando alertas...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="./src/core/modal-utils.js"></script>
+    <script src="./src/core/navigation.js"></script>
+    <script src="./src/core/api.js"></script>
+    <script src="./src/modules/auth/auth.js"></script>
+    <script src="./src/modules/profile/profile.js"></script>
+    <script src="./src/modules/inventory/inventory-data.js"></script>
+    <script src="./src/modules/inventory/inventory-ui.js"></script>
+    <script src="./src/modules/inventory/inventory-product-modal.js"></script>
+    <script src="./src/modules/inventory/inventory-csv-modal.js"></script>
+    <script src="./src/modules/inventory/inventory-delete-view.js"></script>
+    <script src="./src/modules/inventory/inventory-update-modal.js"></script>
+    <script src="./src/modules/inventory/inventory.js"></script>
+    <script src="./src/modules/reports/reports.js"></script>
+    <script src="./src/modules/alerts/alerts.js"></script>
+    <script src="./src/modules/suppliers/suppliers.js"></script>
+    <script src="./src/modules/admin/admin.js"></script>
+    <script src="./src/main.js"></script>
+</body>
+</html>
