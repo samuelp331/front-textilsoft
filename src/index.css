@@ -1,0 +1,18 @@
+@import './legacy-styles.css';
+@import './app-shell.css';
+
+#root {
+  min-height: 100vh;
+}
+
+/* Rutas React: una pantalla visible (sustituye .page/.page.active del HTML monolítico) */
+.app-screen {
+  display: block;
+  position: relative;
+  min-height: 100vh;
+  padding: 20px 22px 32px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  background-color: transparent;
+}

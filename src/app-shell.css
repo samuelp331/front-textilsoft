@@ -1,0 +1,327 @@
+/* Capa visual React: cabecera, dashboard y ritmo de página (complementa legacy-styles) */
+
+.ts-app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding: 14px 18px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+.ts-app-header .logo-small {
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+}
+
+.ts-app-header .logo-small span {
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+.ts-app-header .ts-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 18px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.ts-app-header .ts-btn-icon i {
+  font-size: 1rem;
+  opacity: 0.95;
+}
+
+.ts-app-header .ts-btn-ghost {
+  background: transparent;
+  color: var(--button-color);
+  border: 1px solid rgba(204, 106, 6, 0.35);
+  box-shadow: none;
+}
+
+.ts-app-header .ts-btn-ghost:hover {
+  background: rgba(204, 106, 6, 0.08);
+  transform: translateY(-1px);
+  filter: none;
+}
+
+.ts-app-header .ts-btn-primary-nav {
+  background: var(--nav-color);
+  color: #fff;
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.ts-app-header .ts-btn-primary-nav:hover {
+  background: #1a2535;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  filter: none;
+}
+
+/* Dashboard */
+.ts-dashboard {
+  padding-bottom: 32px;
+}
+
+.ts-dashboard-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.ts-dashboard-intro h1 {
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 700;
+  color: var(--nav-color);
+  letter-spacing: 0.04em;
+  margin: 0 0 6px 0;
+}
+
+.ts-dashboard-intro p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  max-width: 42ch;
+  line-height: 1.5;
+}
+
+.ts-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.ts-dash-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 1.35rem 1.35rem 1.25rem;
+  background: var(--surface-elevated);
+  color: var(--nav-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.ts-dash-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(204, 106, 6, 0.35);
+}
+
+.ts-dash-card:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring), var(--shadow-md);
+}
+
+.ts-dash-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, rgba(204, 106, 6, 0.12), rgba(36, 48, 68, 0.06));
+  color: var(--button-color);
+  font-size: 1.35rem;
+  margin-bottom: 14px;
+}
+
+.ts-dash-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 6px 0;
+}
+
+.ts-dash-card-hint {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Títulos de página bajo cabecera */
+.ts-page-title-block {
+  margin-bottom: 1.25rem;
+}
+
+.ts-page-title-block h1 {
+  font-size: clamp(1.25rem, 2.5vw, 1.55rem);
+  font-weight: 700;
+  color: var(--nav-color);
+  margin: 0 0 6px 0;
+  letter-spacing: 0.03em;
+}
+
+.ts-page-title-block p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.ts-page-panel {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.25rem 1.35rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Login: campos con icono */
+.ts-login-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: 4px 4px 4px 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ts-login-field:focus-within {
+  border-color: rgba(204, 106, 6, 0.55);
+  box-shadow: var(--focus-ring);
+}
+
+.ts-login-field i {
+  color: var(--text-muted);
+  font-size: 1rem;
+  width: 1.25rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.ts-login-field input {
+  border: none;
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px 10px 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ts-login-field input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.login-form .ts-login-submit {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.login-links {
+  margin-top: 14px;
+}
+
+.register-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ts-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+  max-width: 520px;
+}
+
+.ts-search-wrap .light-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.recovery-form button[type='submit'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.report-icon i {
+  font-size: 1.75rem;
+  color: var(--button-color);
+}
+
+.report-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.report-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.product-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.product-options button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-options button i {
+  font-size: 0.95rem;
+  opacity: 0.95;
+}
+
+.config-button,
+.refresh-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-quick-btn i {
+  margin-right: 8px;
+  opacity: 0.9;
+}
+
+@media (max-width: 560px) {
+  .ts-app-header .logo-small {
+    order: -1;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ts-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
