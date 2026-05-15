@@ -255,30 +255,32 @@ export function AlertsPage() {
             {!history.length ? (
               <p className="table-message">Aún no hay alertas registradas como atendidas.</p>
             ) : (
-              <table className="report-table">
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Producto</th>
-                    <th>Tipo</th>
-                    <th>Acción</th>
-                    <th>Usuario</th>
-                    <th>Notas</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {history.slice(0, 80).map((r) => (
-                    <tr key={r.id}>
-                      <td>{r.creado_en ? String(r.creado_en).replace('T', ' ').slice(0, 19) : '—'}</td>
-                      <td>{r.producto_nombre}</td>
-                      <td>{r.tipo_alerta}</td>
-                      <td>{r.accion}</td>
-                      <td>{r.usuario_nombre}</td>
-                      <td>{r.notas}</td>
+              <div className="ts-table-scroll">
+                <table className="report-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Producto</th>
+                      <th>Tipo</th>
+                      <th>Acción</th>
+                      <th>Usuario</th>
+                      <th>Notas</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {history.slice(0, 80).map((r) => (
+                      <tr key={r.id}>
+                        <td>{r.creado_en ? String(r.creado_en).replace('T', ' ').slice(0, 19) : '—'}</td>
+                        <td>{r.producto_nombre}</td>
+                        <td>{r.tipo_alerta}</td>
+                        <td>{r.accion}</td>
+                        <td>{r.usuario_nombre}</td>
+                        <td>{r.notas}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         </div>

@@ -148,10 +148,6 @@ export function LoginPage() {
             Recuperar cuenta
           </Link>
         </div>
-        <button type="button" className="register-btn" onClick={() => navigate('/register')}>
-          <i className="fa-solid fa-user-plus" aria-hidden />
-          Crear cuenta
-        </button>
       </form>
     </div>
   );

@@ -351,38 +351,40 @@ export function SuppliersPage() {
               &times;
             </button>
             <h2>Historial — {histModal.name}</h2>
-            <table className="report-table">
-              <thead>
-                <tr>
-                  <th>Fecha</th>
-                  <th>Calidad</th>
-                  <th>Tiempos</th>
-                  <th>Precio/calidad</th>
-                  <th>Prom.</th>
-                  <th>Comentario</th>
-                </tr>
-              </thead>
-              <tbody>
-                {!histModal.rows.length ? (
+            <div className="ts-table-scroll">
+              <table className="report-table">
+                <thead>
                   <tr>
-                    <td colSpan={6} className="table-message">
-                      Sin calificaciones.
-                    </td>
+                    <th>Fecha</th>
+                    <th>Calidad</th>
+                    <th>Tiempos</th>
+                    <th>Precio/calidad</th>
+                    <th>Prom.</th>
+                    <th>Comentario</th>
                   </tr>
-                ) : (
-                  histModal.rows.map((r) => (
-                    <tr key={r.id}>
-                      <td>{r.creado_en ? String(r.creado_en).replace('T', ' ').slice(0, 19) : '—'}</td>
-                      <td>{r.calidad_suministro}</td>
-                      <td>{r.cumplimiento_tiempos}</td>
-                      <td>{r.precio_calidad}</td>
-                      <td>{r.promedio != null ? Number(r.promedio).toFixed(1) : '—'}</td>
-                      <td>{r.comentario || ''}</td>
+                </thead>
+                <tbody>
+                  {!histModal.rows.length ? (
+                    <tr>
+                      <td colSpan={6} className="table-message">
+                        Sin calificaciones.
+                      </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    histModal.rows.map((r) => (
+                      <tr key={r.id}>
+                        <td>{r.creado_en ? String(r.creado_en).replace('T', ' ').slice(0, 19) : '—'}</td>
+                        <td>{r.calidad_suministro}</td>
+                        <td>{r.cumplimiento_tiempos}</td>
+                        <td>{r.precio_calidad}</td>
+                        <td>{r.promedio != null ? Number(r.promedio).toFixed(1) : '—'}</td>
+                        <td>{r.comentario || ''}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

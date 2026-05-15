@@ -1,7 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { api, getApiBase } from '../lib/api.js';
 import { canPerform as permCan, hasPageAccess as permHasPage } from '../lib/permissions.js';
-import { notify } from '../lib/notify.js';
 
 const AuthContext = createContext(null);
 
@@ -99,41 +98,6 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('authToken');
   }, []);
 
-  const register = useCallback(async (userData) => {
-    if (
-      !userData?.name ||
-      !userData?.identification ||
-      !userData?.cellphone ||
-      !userData?.email ||
-      !userData?.rol ||
-      !userData?.address ||
-      !userData?.password ||
-      !userData?.confirmPassword
-    ) {
-      notify.toast('Por favor complete todos los campos requeridos.', 'warning');
-      return false;
-    }
-    if (userData.password !== userData.confirmPassword) {
-      notify.toast('Las contrasenas no coinciden.', 'warning');
-      return false;
-    }
-    try {
-      await api.post('/register', {
-        nombre: userData.name,
-        identificacion: userData.identification,
-        celular: userData.cellphone,
-        direccion: userData.address,
-        email: userData.email,
-        password: userData.password,
-        rol: userData.rol || 'operario',
-      });
-      return true;
-    } catch (error) {
-      notify.toast(`Hubo un error al registrar: ${error.message}`, 'error');
-      return false;
-    }
-  }, []);
-
   const recoverAccount = useCallback(async (email) => api.post('/recover-account', { email }), []);
 
   const resetPassword = useCallback(
@@ -156,14 +120,13 @@ export function AuthProvider({ children }) {
       user,
       login,
       logout,
-      register,
       recoverAccount,
       resetPassword,
       hasPageAccess,
       canPerform: canPerformAction,
       lastLoginError,
     }),
-    [user, login, logout, register, recoverAccount, resetPassword, hasPageAccess, canPerformAction, lastLoginError],
+    [user, login, logout, recoverAccount, resetPassword, hasPageAccess, canPerformAction, lastLoginError],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,5 +1,6 @@
 @import './legacy-styles.css';
 @import './app-shell.css';
+@import './mobile-enhancements.css';
 
 #root {
   min-height: 100vh;

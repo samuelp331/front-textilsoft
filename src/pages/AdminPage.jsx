@@ -23,6 +23,10 @@ export function AdminPage() {
     nombre: '',
     email: '',
     password: '',
+    confirmPassword: '',
+    identificacion: '',
+    celular: '',
+    direccion: '',
     rol: 'operario',
     estado: 'activo',
   });
@@ -90,6 +94,10 @@ export function AdminPage() {
         nombre: u.nombre || '',
         email: u.email || '',
         password: '',
+        confirmPassword: '',
+        identificacion: u.perfil?.identificacion ?? '',
+        celular: u.perfil?.celular ?? '',
+        direccion: u.perfil?.direccion ?? '',
         rol: u.rol?.nombre || 'operario',
         estado: u.estado === 'inactivo' ? 'inactivo' : 'activo',
       });
@@ -101,26 +109,63 @@ export function AdminPage() {
 
   const showNew = () => {
     setEditId('');
-    setUForm({ nombre: '', email: '', password: '', rol: 'operario', estado: 'activo' });
+    setUForm({
+      nombre: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      identificacion: '',
+      celular: '',
+      direccion: '',
+      rol: 'operario',
+      estado: 'activo',
+    });
     setFormOpen(true);
   };
 
   const saveUser = async (e) => {
     e.preventDefault();
-    const { nombre, email, password, rol, estado } = uForm;
+    const { nombre, email, password, confirmPassword, rol, estado, identificacion, celular, direccion } = uForm;
     if (!nombre || !email || !rol) {
       notify.toast('Complete nombre, correo y rol.', 'warning');
       return;
     }
     try {
       if (!editId) {
+        const idTrim = identificacion.trim();
+        const celTrim = celular.trim();
+        const dirTrim = direccion.trim();
+        if (!idTrim || !celTrim || !dirTrim) {
+          notify.toast('Complete identificación, celular y dirección del colaborador.', 'warning');
+          return;
+        }
         if (!password || password.length < 6) {
           notify.toast('La contraseña debe tener al menos 6 caracteres.', 'warning');
           return;
         }
-        await api.post('/admin/usuarios/', { nombre, email, password, rol });
+        if (password !== confirmPassword) {
+          notify.toast('Las contraseñas no coinciden.', 'warning');
+          return;
+        }
+        await api.post('/admin/usuarios/', {
+          nombre,
+          email,
+          password,
+          rol,
+          identificacion: idTrim,
+          celular: celTrim,
+          direccion: dirTrim,
+        });
       } else {
-        const body = { nombre, email, rol, estado };
+        const body = {
+          nombre,
+          email,
+          rol,
+          estado,
+          identificacion: identificacion.trim(),
+          celular: celular.trim(),
+          direccion: direccion.trim(),
+        };
         if (password && password.length >= 6) body.password = password;
         await api.patch(`/admin/usuarios/${editId}/`, body);
       }
@@ -262,75 +307,163 @@ export function AdminPage() {
 
         <section className="admin-section admin-users-section">
           <h2>Gestión de usuarios</h2>
+          <p className="admin-users-hint">
+            Las cuentas se crean solo desde este panel. Indique los datos del usuario y asigne el rol correspondiente.
+          </p>
           <div className="admin-users-toolbar">
             <button type="button" className="admin-user-new-btn" onClick={showNew}>
+              <i className="fa-solid fa-user-plus" style={{ marginRight: '8px' }} aria-hidden />
               Nuevo usuario
             </button>
           </div>
           {formOpen && (
-            <form className="admin-user-form" onSubmit={saveUser}>
-              <h3 className="admin-user-form-title">{editId ? 'Editar usuario' : 'Nuevo usuario'}</h3>
-              <label>Nombre</label>
-              <input value={uForm.nombre} onChange={(e) => setUForm((f) => ({ ...f, nombre: e.target.value }))} required />
-              <label>Correo</label>
-              <input type="email" value={uForm.email} onChange={(e) => setUForm((f) => ({ ...f, email: e.target.value }))} required />
-              <label>{editId ? 'Contraseña (opcional)' : 'Contraseña'}</label>
-              <input type="password" value={uForm.password} onChange={(e) => setUForm((f) => ({ ...f, password: e.target.value }))} />
-              <label>Rol</label>
-              <select value={uForm.rol} onChange={(e) => setUForm((f) => ({ ...f, rol: e.target.value }))}>
-                <option value="operario">Operario</option>
-                <option value="bodeguero">Bodeguero</option>
-                <option value="supervisor">Supervisor</option>
-                <option value="administrador">Administrador</option>
-              </select>
-              {editId && (
-                <label>Estado</label>
-              )}
-              {editId && (
-                <select value={uForm.estado} onChange={(e) => setUForm((f) => ({ ...f, estado: e.target.value }))}>
-                  <option value="activo">Activo</option>
-                  <option value="inactivo">Inactivo</option>
-                </select>
-              )}
-              <div className="admin-user-form-actions">
-                <button type="submit">Guardar</button>
-                <button type="button" className="secondary-button admin-user-cancel-btn" onClick={() => setFormOpen(false)}>
-                  Cancelar
+            <div
+              className="modal admin-user-modal"
+              style={{ display: 'block' }}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="adminUserModalTitle"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) setFormOpen(false);
+              }}
+            >
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <button
+                  type="button"
+                  className="close-button admin-user-modal-close"
+                  aria-label="Cerrar"
+                  onClick={() => setFormOpen(false)}
+                >
+                  &times;
                 </button>
-              </div>
-            </form>
-          )}
-          <table className="report-table">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Rol</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => (
-                <tr key={u.id}>
-                  <td>{u.nombre}</td>
-                  <td>{u.email}</td>
-                  <td>{rolDisplayName(u.rol?.nombre)}</td>
-                  <td>{u.estado === 'activo' ? 'Activo' : 'Inactivo'}</td>
-                  <td className="admin-users-actions">
-                    <button type="button" className="admin-user-edit-btn" onClick={() => openEdit(u.id)}>
-                      Editar
+                <h2 id="adminUserModalTitle">{editId ? 'Editar usuario' : 'Nuevo usuario'}</h2>
+                <p className="admin-user-modal-subtitle">Datos del usuario</p>
+                <form onSubmit={saveUser}>
+                  <input
+                    value={uForm.nombre}
+                    onChange={(e) => setUForm((f) => ({ ...f, nombre: e.target.value }))}
+                    placeholder="Nombre completo"
+                    required
+                    autoComplete="name"
+                    aria-label="Nombre completo"
+                  />
+                  <input
+                    value={uForm.identificacion}
+                    onChange={(e) => setUForm((f) => ({ ...f, identificacion: e.target.value }))}
+                    required={!editId}
+                    placeholder="Identificación"
+                    aria-label="Identificación"
+                  />
+                  <input
+                    value={uForm.celular}
+                    onChange={(e) => setUForm((f) => ({ ...f, celular: e.target.value }))}
+                    required={!editId}
+                    placeholder="Celular"
+                    inputMode="tel"
+                    aria-label="Celular"
+                  />
+                  <input
+                    value={uForm.direccion}
+                    onChange={(e) => setUForm((f) => ({ ...f, direccion: e.target.value }))}
+                    required={!editId}
+                    placeholder="Dirección"
+                    autoComplete="street-address"
+                    aria-label="Dirección"
+                  />
+                  <input
+                    type="email"
+                    value={uForm.email}
+                    onChange={(e) => setUForm((f) => ({ ...f, email: e.target.value }))}
+                    placeholder="Correo electrónico"
+                    required
+                    autoComplete="off"
+                    aria-label="Correo electrónico"
+                  />
+                  <select
+                    value={uForm.rol}
+                    onChange={(e) => setUForm((f) => ({ ...f, rol: e.target.value }))}
+                    required
+                    aria-label="Rol en el sistema"
+                  >
+                    <option value="operario">Operario</option>
+                    <option value="bodeguero">Bodeguero</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="administrador">Administrador</option>
+                  </select>
+                  <input
+                    type="password"
+                    value={uForm.password}
+                    onChange={(e) => setUForm((f) => ({ ...f, password: e.target.value }))}
+                    placeholder={editId ? 'Contraseña nueva (opcional)' : 'Contraseña'}
+                    autoComplete="new-password"
+                    aria-label={editId ? 'Contraseña nueva (opcional)' : 'Contraseña'}
+                  />
+                  {!editId && (
+                    <input
+                      type="password"
+                      value={uForm.confirmPassword}
+                      onChange={(e) => setUForm((f) => ({ ...f, confirmPassword: e.target.value }))}
+                      placeholder="Confirmar contraseña"
+                      autoComplete="new-password"
+                      aria-label="Confirmar contraseña"
+                    />
+                  )}
+                  {editId && (
+                    <div className="form-group">
+                      <label htmlFor="adminUserEstado">Estado:</label>
+                      <select
+                        id="adminUserEstado"
+                        value={uForm.estado}
+                        onChange={(e) => setUForm((f) => ({ ...f, estado: e.target.value }))}
+                      >
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                      </select>
+                    </div>
+                  )}
+                  <div className="admin-user-modal-actions">
+                    <button type="submit">Guardar</button>
+                    <button type="button" className="admin-user-modal-cancel" onClick={() => setFormOpen(false)}>
+                      Cancelar
                     </button>
-                    {u.estado === 'activo' && u.id !== myId && (
-                      <button type="button" className="admin-user-deactivate-btn" onClick={() => deactivate(u.id)}>
-                        Desactivar
-                      </button>
-                    )}
-                  </td>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+          <div className="ts-table-scroll">
+            <table className="report-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.map((u) => (
+                  <tr key={u.id}>
+                    <td>{u.nombre}</td>
+                    <td>{u.email}</td>
+                    <td>{rolDisplayName(u.rol?.nombre)}</td>
+                    <td>{u.estado === 'activo' ? 'Activo' : 'Inactivo'}</td>
+                    <td className="admin-users-actions">
+                      <button type="button" className="admin-user-edit-btn" onClick={() => openEdit(u.id)}>
+                        Editar
+                      </button>
+                      {u.estado === 'activo' && u.id !== myId && (
+                        <button type="button" className="admin-user-deactivate-btn" onClick={() => deactivate(u.id)}>
+                          Desactivar
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
       </div>
     </div>

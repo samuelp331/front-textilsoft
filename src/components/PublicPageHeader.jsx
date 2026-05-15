@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-/** Cabecera para registro, recuperación y restablecimiento (misma línea visual que el dashboard). */
+/** Cabecera para recuperación y restablecimiento de contraseña (misma línea visual que el dashboard). */
 export function PublicPageHeader({ onExit }) {
   const navigate = useNavigate();
   const handleExit = onExit || (() => navigate('/login'));

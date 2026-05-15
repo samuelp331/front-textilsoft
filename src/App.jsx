@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext.jsx';
 import { LoginPage } from './pages/LoginPage.jsx';
-import { RegisterPage } from './pages/RegisterPage.jsx';
 import { RecoverPage } from './pages/RecoverPage.jsx';
 import { ResetPasswordPage } from './pages/ResetPasswordPage.jsx';
 import { DashboardPage } from './pages/DashboardPage.jsx';
@@ -29,7 +28,7 @@ function ProtectedRoute({ children, pageId }) {
 export default function App() {
   const { user } = useAuth();
   const location = useLocation();
-  const publicPaths = ['/login', '/register', '/recover', '/reset-password'];
+  const publicPaths = ['/login', '/recover', '/reset-password'];
   const isPublic = publicPaths.includes(location.pathname);
 
   if (user && isPublic && location.pathname !== '/reset-password') {
@@ -39,7 +38,6 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
       <Route path="/recover" element={<RecoverPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route

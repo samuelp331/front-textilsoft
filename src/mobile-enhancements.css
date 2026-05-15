@@ -1,0 +1,427 @@
+/**
+ * Mejoras solo para viewport estrecho (móvil / tablet en vertical).
+ * No afecta estilos por defecto en escritorio (min-width: 769px).
+ */
+@media (max-width: 768px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  #root {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .app-screen,
+  .page {
+    padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right))
+      max(24px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+
+  .ts-page-panel,
+  .report-content {
+    padding: 1rem 1rem 1.15rem;
+  }
+
+  .ts-page-title-block h1 {
+    font-size: clamp(1.05rem, 4.5vw, 1.45rem);
+    line-height: 1.25;
+    word-break: break-word;
+  }
+
+  /* Cabecera: logo arriba (mismo criterio que app-shell ≤560px, extendido a tablet) */
+  .ts-app-header {
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+  }
+
+  .ts-app-header .ts-btn-icon {
+    min-height: 44px;
+    padding: 10px 14px;
+    touch-action: manipulation;
+  }
+
+  .ts-app-header .logo-small {
+    order: -1;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ts-dashboard-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .ts-dashboard-intro p {
+    max-width: none;
+  }
+
+  .ts-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ts-dash-card {
+    padding: 1.15rem 1.15rem 1rem;
+    min-height: 44px;
+  }
+
+  .ts-search-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: none;
+    gap: 10px;
+  }
+
+  /* Login / registro / recuperación */
+  #loginPage .logo-container {
+    padding-top: 12px;
+    margin-bottom: 1.25rem;
+  }
+
+  .logo {
+    width: min(200px, 72vw);
+    height: auto;
+    max-height: 100px;
+  }
+
+  .login-form {
+    padding: 1.25rem 1.1rem;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .registration-container {
+    margin: 1rem auto;
+    padding: 1.25rem 1.1rem;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  /* Perfil y formularios */
+  .profile-content {
+    padding: 1.2rem 1rem 1.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  .profile-buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .profile-buttons button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Inventario */
+  #productPage #productContent {
+    padding: 1rem 1rem 1.25rem;
+  }
+
+  .product-options {
+    grid-template-columns: 1fr;
+  }
+
+  .product-options button {
+    width: 100%;
+    justify-content: center;
+    min-height: 46px;
+  }
+
+  .delete-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .delete-buttons button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .inventory-table th,
+  .inventory-table td {
+    padding: 9px 10px;
+    font-size: 0.8125rem;
+  }
+
+  .inventory-table th {
+    font-size: 0.72rem;
+  }
+
+  /* Tablas en contenedor: permitir scroll horizontal (antes overflow-x:hidden cortaba contenido) */
+  .table-container,
+  #suppliersPage .table-container {
+    overflow-x: auto !important;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    max-height: min(58dvh, 520px);
+  }
+
+  /* Tablas con scroll dedicado (.ts-table-scroll): mismo comportamiento táctil en móvil */
+  .ts-table-scroll {
+    overflow-x: auto !important;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ts-table-scroll .report-table tbody td {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  #consumptionTable.report-table {
+    min-width: 440px;
+    table-layout: auto;
+  }
+
+  #movementsTable.report-table,
+  #suppliersTable {
+    min-width: 640px;
+    table-layout: auto;
+  }
+
+  .report-table > thead > tr > th {
+    padding: 10px 8px !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .report-table tbody td {
+    padding: 10px 10px;
+    font-size: 0.875rem;
+  }
+
+  #suppliersTable .actions {
+    white-space: nowrap;
+  }
+
+  /* Filtros de reportes */
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .filter-control {
+    min-width: 0;
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .filter-control .accent-button {
+    align-self: stretch;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 4px;
+  }
+
+  .report-actions {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: stretch;
+    gap: 10px;
+  }
+
+  .report-actions .primary-button {
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+  }
+
+  /* Reportes hub */
+  .reports-grid {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: none;
+    gap: 14px;
+  }
+
+  .report-card {
+    max-width: none;
+    width: 100%;
+    min-height: 48px;
+  }
+
+  /* Consumo: texto y gráfico */
+  .consumption-trend-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  .consumption-trend-header .trend-total {
+    margin-left: 0;
+  }
+
+  /* Alertas */
+  .alerts-container {
+    padding: 12px;
+  }
+
+  .alerts-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .alerts-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .config-button,
+  .refresh-button {
+    width: 100%;
+    justify-content: center;
+    min-height: 46px;
+  }
+
+  .alerts-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .alerts-list {
+    padding: 14px;
+  }
+
+  .alert-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .alert-icon {
+    margin-right: 0;
+    align-self: flex-start;
+  }
+
+  .alert-actions {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .alert-action-button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Proveedores */
+  .page-actions-footer .accent-button {
+    width: 100%;
+    max-width: none;
+    min-height: 46px;
+  }
+
+  /* Admin */
+  .admin-container {
+    padding: 12px;
+  }
+
+  .admin-container h1 {
+    font-size: 1.45rem;
+  }
+
+  .admin-quick-btn {
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .chart-bars {
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    justify-content: center;
+  }
+
+  .chart-bar {
+    width: 48px;
+  }
+
+  .admin-user-modal .modal-content {
+    width: 92%;
+    margin: 6vh auto;
+  }
+
+  .admin-user-modal-actions {
+    flex-direction: column;
+  }
+
+  .admin-user-modal-actions button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .admin-users-actions {
+    justify-content: flex-start;
+  }
+
+  .admin-users-actions button {
+    min-height: 40px;
+    padding: 0.35rem 0.65rem;
+  }
+
+  /* Modales: área táctil y scroll; no tocar display (inline block/flex desde React) */
+  .modal {
+    padding: max(10px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+      max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-content {
+    width: min(100%, calc(100vw - 24px)) !important;
+    max-width: min(520px, calc(100vw - 24px)) !important;
+    margin: 8px auto 16px !important;
+    max-height: min(88dvh, calc(100vh - 24px)) !important;
+    overflow-y: auto !important;
+    padding: 22px 18px 20px !important;
+    box-sizing: border-box;
+  }
+
+  #supplierModal .modal-content,
+  #notificationSettingsModal .modal-content {
+    width: min(100%, calc(100vw - 24px)) !important;
+    max-width: min(550px, calc(100vw - 24px)) !important;
+  }
+
+  .close-button {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: -8px -8px 8px auto;
+    float: none;
+  }
+
+  /* Evita zoom en focus iOS manteniendo legibilidad */
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  .light-input,
+  .light-select {
+    font-size: 16px !important;
+  }
+
+  button,
+  .primary-button,
+  .secondary-button,
+  .accent-button {
+    touch-action: manipulation;
+  }
+}
