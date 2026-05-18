@@ -23,6 +23,27 @@ Abrir normalmente `http://127.0.0.1:5173`.
 | `npm run preview` | Preview del build |
 | `npm test` | Vitest |
 
+## Despliegue en Render
+
+Crear un servicio de tipo **Static Site** conectado al repositorio del frontend.
+
+Si el repositorio contiene directamente este proyecto, usar:
+
+```bash
+Build Command: npm ci && npm run build
+Publish Directory: dist
+```
+
+Si se despliega desde el repositorio monolito, configurar **Root Directory** como `frontend`.
+
+Variable requerida:
+
+```bash
+VITE_API_BASE=https://tu-backend.onrender.com/api
+```
+
+El archivo `render.yaml` incluye una regla de rewrite a `index.html` para que las rutas de la SPA funcionen al recargar la pagina.
+
 ## Estructura resumida
 
 - `src/main.jsx`, `src/App.jsx` — entrada y rutas protegidas
