@@ -14,8 +14,11 @@ import { SuppliersPage } from './pages/SuppliersPage.jsx';
 import { AdminPage } from './pages/AdminPage.jsx';
 
 function ProtectedRoute({ children, pageId }) {
-  const { user, hasPageAccess } = useAuth();
+  const { user, hasPageAccess, authReady } = useAuth();
   const location = useLocation();
+  if (!authReady) {
+    return null;
+  }
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
@@ -26,10 +29,14 @@ function ProtectedRoute({ children, pageId }) {
 }
 
 export default function App() {
-  const { user } = useAuth();
+  const { user, authReady } = useAuth();
   const location = useLocation();
   const publicPaths = ['/login', '/recover', '/reset-password'];
   const isPublic = publicPaths.includes(location.pathname);
+
+  if (!authReady) {
+    return null;
+  }
 
   if (user && isPublic && location.pathname !== '/reset-password') {
     return <Navigate to="/dashboard" replace />;

@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { api, getApiBase } from '../lib/api.js';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { api, getApiBase, getToken } from '../lib/api.js';
 import { canPerform as permCan, hasPageAccess as permHasPage } from '../lib/permissions.js';
 
 const AuthContext = createContext(null);
@@ -62,9 +62,52 @@ function toProfileFromBackend(payload, username) {
   };
 }
 
+function toProfileFromProfile(payload) {
+  return {
+    id: payload?.usuario_id,
+    name: payload?.nombre || '',
+    identification: payload?.identificacion || String(payload?.usuario_id || ''),
+    cellphone: payload?.celular || '',
+    jobTitle: payload?.cargo || payload?.rol || '',
+    email: payload?.email || '',
+    address: payload?.direccion || '',
+    entryDate: payload?.fecha_contratacion || new Date().toISOString().split('T')[0],
+    role: payload?.rol || payload?.cargo || 'user',
+  };
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [lastLoginError, setLastLoginError] = useState(null);
+  const [authReady, setAuthReady] = useState(() => !getToken());
+
+  useEffect(() => {
+    let active = true;
+
+    const restoreSession = async () => {
+      const token = getToken();
+      if (!token) {
+        setAuthReady(true);
+        return;
+      }
+
+      try {
+        const profile = await api.get('/profile/me');
+        if (active) setUser(toProfileFromProfile(profile));
+      } catch {
+        localStorage.removeItem('authToken');
+        if (active) setUser(null);
+      } finally {
+        if (active) setAuthReady(true);
+      }
+    };
+
+    restoreSession();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const login = useCallback(async (username, password) => {
     setLastLoginError(null);
@@ -125,8 +168,9 @@ export function AuthProvider({ children }) {
       hasPageAccess,
       canPerform: canPerformAction,
       lastLoginError,
+      authReady,
     }),
-    [user, login, logout, recoverAccount, resetPassword, hasPageAccess, canPerformAction, lastLoginError],
+    [user, login, logout, recoverAccount, resetPassword, hasPageAccess, canPerformAction, lastLoginError, authReady],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
